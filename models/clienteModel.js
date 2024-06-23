@@ -12,7 +12,8 @@ class Cliente {
 
     static async getAllClientes() {
         const query = 'SELECT * FROM clientes';
-        const clientes = await db.query(query).execute()
+        const clientes = await db.query(query)
+
         console.log(clientes)
         //     , (err, results) => {
         //     if (err) {
