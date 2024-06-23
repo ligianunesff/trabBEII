@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const produtoController = require('../controllers/produtoController');
+const verifyToken = require('../middlewares/verifyToken');
 
-// Rota para listar todos os produtos
+// Rota para listar todos os produtos (não requer autenticação)
 router.get('/', produtoController.getAllProdutos);
 
-// Rota para buscar um produto pelo ID
+// Rota para buscar um produto pelo ID (não requer autenticação)
 router.get('/:id', produtoController.getProdutoById);
 
-// Rota para criar um novo produto
-router.post('/', produtoController.createProduto);
+// Rota para criar um novo produto (requer autenticação)
+router.post('/', verifyToken, produtoController.createProduto);
 
-// Rota para atualizar um produto pelo ID
-router.put('/:id', produtoController.updateProduto);
+// Rota para atualizar um produto pelo ID (requer autenticação)
+router.put('/:id', verifyToken, produtoController.updateProduto);
 
-// Rota para excluir um produto pelo ID
-router.delete('/:id', produtoController.deleteProduto);
+// Rota para excluir um produto pelo ID (requer autenticação)
+router.delete('/:id', verifyToken, produtoController.deleteProduto);
 
 module.exports = router;

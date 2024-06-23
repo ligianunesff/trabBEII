@@ -1,6 +1,6 @@
 const clienteModel = require('../models/clienteModel');
-const db = require('../configs/database');
 const cache = require('../cache'); // Importar o cache
+const { logCacheRequest, logDatabaseRequest } = require('../middlewares/logger'); // Importar os loggers
 
 // Função para listar todos os clientes
 exports.getAllClientes = async (req, res) => {
@@ -8,14 +8,14 @@ exports.getAllClientes = async (req, res) => {
   const cachedData = cache.get(cacheKey);
 
   if (cachedData) {
-    console.log('Serving from cache');
+    logCacheRequest(req, res, () => {}); // Log de requisição para cache
     return res.json(cachedData);
   }
 
   try {
     const clientes = await clienteModel.getAllClientes();
     cache.set(cacheKey, clientes); // Armazena no cache
-    console.log('Serving from database');
+    logDatabaseRequest(req, res, () => {}); // Log de requisição para banco de dados
     res.json(clientes);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -29,7 +29,7 @@ exports.getClienteById = async (req, res) => {
   const cachedData = cache.get(cacheKey);
 
   if (cachedData) {
-    console.log('Serving from cache');
+    logCacheRequest(req, res, () => {}); // Log de requisição para cache
     return res.json(cachedData);
   }
 
@@ -39,7 +39,7 @@ exports.getClienteById = async (req, res) => {
       return res.status(404).json({ message: 'Cliente não encontrado' });
     }
     cache.set(cacheKey, cliente); // Armazena no cache
-    console.log('Serving from database');
+    logDatabaseRequest(req, res, () => {}); // Log de requisição para banco de dados
     res.json(cliente);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -1,6 +1,15 @@
-const logger = (req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
+const logCacheRequest = (req, res, next) => {
+    console.log(`[CACHE] Requisição para ${req.method} ${req.originalUrl}`);
     next();
-};
-
-module.exports = logger;
+  };
+  
+  const logDatabaseRequest = (req, res, next) => {
+    console.log(`[DB] Requisição para ${req.method} ${req.originalUrl}`);
+    next();
+  };
+  
+  module.exports = {
+    logCacheRequest,
+    logDatabaseRequest,
+  };
+  

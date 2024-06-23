@@ -1,19 +1,21 @@
 const mysql = require('mysql2/promise');
-// require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 
-const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '@Uni123',
-    database: 'TrabBEII'
-});
+async function connectToDatabase() {
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE
+        });
 
-/*connection.connect((err) => {
-    if (err) {
-        console.error('Erro ao conectar ao banco de dados:', err.stack);
-        return;
+        console.log('Conexão bem-sucedida ao banco de dados MySQL');
+        return connection;
+    } catch (error) {
+        console.error('Erro ao conectar ao banco de dados:', error.stack);
+        throw error;
     }
-    console.log('Conexão bem-sucedida ao banco de dados MySQL');
-});*/
+}
 
-module.exports = connection;
+module.exports = { connectToDatabase };
